@@ -2,8 +2,11 @@ package chi
 
 import "net/http"
 
+// middleware type
+type Middleware func(http.Handler) http.Handler
+
 // Chain returns a Middlewares type from a slice of middleware handlers.
-func Chain(middlewares ...func(http.Handler) http.Handler) Middlewares {
+func Chain(middlewares ...Middleware) Middlewares {
 	return Middlewares(middlewares)
 }
 
@@ -33,7 +36,7 @@ func (c *ChainHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 // chain builds a http.Handler composed of an inline middleware stack and endpoint
 // handler in the order they are passed.
-func chain(middlewares []func(http.Handler) http.Handler, endpoint http.Handler) http.Handler {
+func chain(middlewares []Middleware, endpoint http.Handler) http.Handler {
 	// Return ahead of time if there aren't any middlewares for the chain
 	if len(middlewares) == 0 {
 		return endpoint
