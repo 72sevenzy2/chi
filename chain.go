@@ -2,11 +2,6 @@ package chi
 
 import "net/http"
 
-// middleware type alias
-type Middleware = func(http.Handler) http.Handler
-
-type Middlewares Middleware[]
-
 // Chain returns a Middlewares type from a slice of middleware handlers.
 func Chain(middlewares Middlewares) Middlewares {
 	return Middlewares(middlewares)
